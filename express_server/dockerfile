@@ -2,7 +2,7 @@
 FROM node:14
 
 # Créez un répertoire de travail dans l'image
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copiez le fichier package.json et package-lock.json dans le répertoire de travail
 COPY package*.json ./
@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Copiez le reste des fichiers de l'application dans le répertoire de travail
-COPY . .
+COPY index.js ./
 
 # Exposez le port 3000 sur le conteneur
 EXPOSE 3000

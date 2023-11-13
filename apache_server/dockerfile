@@ -1,4 +1,7 @@
 FROM httpd:2.4
 
 # Copiez le fichier de configuration personnalisé dans l'image
-COPY . ./usr/local/apache2/conf/
+COPY httpd.conf ./usr/local/apache2/conf/
+# COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+
+CMD ["httpd", "-D", "FOREGROUND"]

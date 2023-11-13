@@ -3,8 +3,8 @@ version: '3'
 services:
   express-server:
     build:
-      context: .
-      dockerfile: ./express_server/dockerfile
+      context: ./express_server
+      dockerfile: ./dockerfile
     image: express-server:latest
     ports:
       - "3000:3000"
@@ -13,8 +13,8 @@ services:
     
   apache-server:
     build:
-      context: .
-      dockerfile: ./apache_server/dockerfile
+      context: ./apache_server
+      dockerfile: ./dockerfile
     image: apache-server:latest
     ports:
       - "80:80"
