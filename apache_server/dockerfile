@@ -1,7 +1,12 @@
 FROM httpd:2.4
 
-# Copiez le fichier de configuration personnalisé dans l'image
-COPY httpd.conf ./usr/local/apache2/conf/
-# COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+# Copie de votre fichier httpd.conf personnalisé
+COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+
+# Activation du module MPM event
+RUN sed -i \
+    's/#LoadModule mpm_event_module modules\/mod_mpm_event.so/LoadModule mpm_event_module modules\/mod_mpm_event.so/' \
+    /usr/local/apache2/conf/httpd.conf
 
 CMD ["httpd", "-D", "FOREGROUND"]
+
