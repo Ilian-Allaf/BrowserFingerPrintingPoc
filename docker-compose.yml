@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  express-server:
+    build:
+      context: .
+      dockerfile: ./express_server/dockerfile
+    image: express-server:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+    
+  apache-server:
+    build:
+      context: .
+      dockerfile: ./apache_server/dockerfile
+    image: apache-server:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - express-server
+    networks:
+      - mynetwork 
+networks:
+  mynetwork:
+
