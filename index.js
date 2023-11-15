@@ -2,18 +2,10 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const { trackClientHellos } = require('read-tls-client-hello');
+const { MongoClient } = require("mongodb");
+require('dotenv').config()
 
-// const server = new https.Server({ /* your TLS options etc */ });
-
-// trackClientHellos(server); // <-- Automatically track everything on this server
-
-// server.on('request', (request, response) => {
-//     // In your normal request handler, check `tlsClientHello` on the request's socket:
-//     console.log('Received request with TLS client hello:', request.socket.tlsClientHello);
-// });
-
-//---------------------------------------------------------------------------------------------
-
+const client = new MongoClient(process.env.MONGO_URI);
 const app = express();
 
 const options = {
@@ -29,17 +21,39 @@ const options = {
 const server = https.createServer(options, app);
 trackClientHellos(server); 
 
+// Middleware
+app.use('/test', async (req, res, next) => {
+  try {
+    const ja3 = req.socket.tlsClientHello.ja3;
+
+    // Connect to MongoDB
+    await client.connect();
+
+    // Select DB and Collection
+    const database = client.db("fingerprinting-db");
+    const collection = database.collection("ja3");
+
+    // Insert ja3 in DB
+    await collection.insertOne({ ja3 });
+
+    console.log('ja3:', ja3);
+
+    next();
+  } catch (error) {
+    console.error("Error while inserting in the database:", error);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
+
 // Route GET simple
 app.get('/test', (req, res) => {
-  console.log('ja3:', req.socket.tlsClientHello.ja3);
-  res.json({ message: 'Bonjour, ceci est une réponse de votre API Express en HTTPS !' });
+  res.json({ message: 'Hello, this is a response from your Express API !' });
 });
 
 server.listen(443, () => {
-  console.log("Serveur HTTPS en cours d'exécution sur le port 443");
+  console.log("HTTPS Server is running on port port 443");
 });
-
-
 
 
 
