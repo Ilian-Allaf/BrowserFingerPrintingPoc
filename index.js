@@ -23,15 +23,15 @@ const options = {
   cert: fs.readFileSync('selfsigned.crt'),
   minVersion: "TLSv1.1",
   maxVersion: "TLSv1.3",
-  enableTrace: false
+  enableTrace: false // Change to true to log tls client hello data
 }
 
 const server = https.createServer(options, app);
 trackClientHellos(server); 
 
 // Route GET simple
-app.get('/api/hello', (req, res) => {
-  console.log('Received request with TLS client hello:', req.socket.tlsClientHello, req.socket.autoSelectFamilyAttemptedAddresses);
+app.get('/test', (req, res) => {
+  console.log('ja3:', req.socket.tlsClientHello.ja3);
   res.json({ message: 'Bonjour, ceci est une réponse de votre API Express en HTTPS !' });
 });
 
