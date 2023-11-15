@@ -1,11 +1,19 @@
 # BrowserFingerPrintingPoc
 
+The docker compose contain two services. There is an apache reverse proxy that forward requests to a simple express api.
+
+To start the app:
+
 ```bash
-node index.js
+cd BrowserFingerPrintingPoc
 ```
 
 ```bash
-curl -k https://localhost:443/api/hello
+docker compose up -d --build
 ```
 
-curl -X POST http://localhost:443/send-cipher-suites
+Try to query:
+
+```bash
+curl https://localhost:443/test
+```
